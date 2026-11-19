@@ -4,7 +4,6 @@ Arquitectura: Flask + SQLite3 + Soporte Escáner USB + Cámara Móvil en Vivo y 
 """
 
 import os
-import sys
 import json
 import sqlite3
 import datetime
@@ -19,8 +18,6 @@ from pyzbar import pyzbar
 # ==============================================================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "registro_aprendices.db")
-CERT_FILE = os.path.join(BASE_DIR, "cert.pem")
-KEY_FILE = os.path.join(BASE_DIR, "key.pem")
 
 app = Flask(__name__, template_folder=os.path.join(BASE_DIR, "templates"))
 
@@ -307,32 +304,21 @@ def asistencias_hoy():
 
 
 # ==============================================================================
-# INICIO DEL SERVIDOR (HTTP / HTTPS)
+# INICIO DEL SERVIDOR (HTTP PURO)
 # ==============================================================================
+# El servidor corre estrictamente en HTTP sobre localhost. El acceso seguro
+# desde el celular se logra mediante el Port Forwarding (túnel HTTPS) de VS Code,
+# que expone este puerto local a través de una URL HTTPS proporcionada por VS Code.
 if __name__ == "__main__":
     PUERTO = 5000
-    IP_HOST = "192.168.20.21"
-
-    usar_https = "--https" in sys.argv
 
     print("\n" + "=" * 75)
     print("        SISTEMA DE ASISTENCIA SENA - SERVIDOR WEB ACTIVO")
     print("=" * 75)
+    print(f" [MODO HTTP LOCAL]")
+    print(f" -> En esta Computadora : http://localhost:{PUERTO}")
+    print(" -> En tu Teléfono Móvil: usa la URL HTTPS generada por el túnel de VS Code")
+    print("                          (pestaña 'Ports / Puertos' -> reenviar el 5000).")
+    print("=" * 75 + "\n")
 
-    if usar_https and os.path.exists(CERT_FILE) and os.path.exists(KEY_FILE):
-        print(f" [MODO HTTPS ACTIVO - CA LOCAL]")
-        print(f" -> En esta Computadora : https://localhost:{PUERTO}")
-        print(f" -> En tu Teléfono Móvil : https://{IP_HOST}:{PUERTO}")
-        print(" NOTA: El certificado lo firma tu CA local. Si ya instalaste rootCA.crt")
-        print("       en el celular, NO verás advertencia y la cámara en vivo funcionará.")
-        print("=" * 75 + "\n")
-        app.run(host="0.0.0.0", port=PUERTO, ssl_context=(CERT_FILE, KEY_FILE), debug=False)
-    else:
-        print(f" [MODO HTTP ESTÁNDAR]")
-        print(f" -> En esta Computadora : http://localhost:{PUERTO}")
-        print(f" -> En tu Teléfono Móvil : http://{IP_HOST}:{PUERTO}")
-        print("=" * 75)
-        print(" TIP: Si deseas iniciar con HTTPS para la cámara en vivo, ejecuta:")
-        print("      python app.py --https")
-        print("=" * 75 + "\n")
-        app.run(host="0.0.0.0", port=PUERTO, debug=False)
+    app.run(host="0.0.0.0", port=PUERTO, debug=False)

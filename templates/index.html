@@ -521,9 +521,9 @@
 
       if (!esContextoSeguro()) {
         mostrarAvisoCamara(
-          "El navegador solo habilita la <strong>cámara en vivo</strong> en conexiones seguras (HTTPS con certificado de confianza).<br><br>" +
+          "El navegador solo habilita la <strong>cámara en vivo</strong> en conexiones seguras (HTTPS).<br><br>" +
           "<strong>Opciones:</strong><br>" +
-          "1. Entra desde el celular a <code>https://192.168.20.21:5000</code> e instala el certificado <code>rootCA.crt</code> (ver README).<br>" +
+          "1. Accede desde el celular usando la URL <code>https://…</code> que genera el túnel de VS Code (pestaña 'Puertos').<br>" +
           "2. Usa el botón azul <strong>“📸 Tomar Foto al Carnet”</strong>: funciona siempre, incluso sin HTTPS."
         );
         return;

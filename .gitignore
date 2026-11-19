@@ -16,13 +16,6 @@ server_https.log
 *.db-shm
 *.db-wal
 
-# Certificados SSL y claves criptográficas (Seguridad)
-*.pem
-*.key
-*.crt
-*.srl
-*.bak
-
 # Entornos virtuales
 venv/
 .venv/
